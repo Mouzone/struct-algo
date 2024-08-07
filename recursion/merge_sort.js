@@ -17,9 +17,9 @@ function mergeSort(list) {
     }
 
     if (list1.length) {
-        result.concat(list1)
+        result.push(...list1)
     } else if (list2.length) {
-        result.concat(list2)
+        result.push(...list2)
     }
 
     return result
@@ -30,4 +30,4 @@ console.log(mergeSort([0]))
 console.log(mergeSort([0, 1]))
 console.log(mergeSort([0, 1, 2]))
 console.log(mergeSort([3, 2, 1, 13, 8, 5, 0, 1]))
-// console.log(mergeSort([79, 100, 105, 110]))
+console.log(mergeSort([79, 100, 105, 110]))
