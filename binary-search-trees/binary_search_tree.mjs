@@ -130,6 +130,75 @@ export class Tree {
         }
         return null
     }
+
+    levelOrder(callback) {
+        const queue = [this.root]
+        while (queue.length) {
+            const curr_node = queue.shift()
+            callback(curr_node)
+            if (curr_node.left) {
+                queue.push(curr_node.left)
+            } else if (curr_node.right) {
+                queue.push(curr_node.right)
+            }
+        }
+    }
+
+    inOrder(callback) {
+        const stack = []
+        let current = this.root
+
+        while (1) {
+            if (current) {
+                stack.push(current)
+                current = current.left
+            } else if (stack.length) {
+                current = stack.pop()
+                callback(current)
+
+                current = current.right
+            } else {
+                break
+            }
+        }
+    }
+
+    preOrder(callback) {
+        const stack = [this.root]
+
+        while (stack.length) {
+           const curr_node = stack.pop()
+           callback(curr_node)
+           if (curr_node.right) {
+               stack.append(curr_node.right)
+           }
+           if (curr_node.left) {
+               stack.append(curr_node.left)
+           }
+       }
+    }
+
+    postOrder(callback) {
+        const stack = []
+        let curr_node = this.root
+        while (curr_node || stack.length) {
+            while (curr_node) {
+                if (curr_node.right) {
+                    stack.push(curr_node.right)
+                }
+                stack.push(curr_node)
+                curr_node = curr_node.left
+            }
+
+            if (stack.length && curr_node.right === stack[-1]) {
+                stack[-1] = curr_node
+                curr_node = curr_node.right
+            } else {
+                callback(curr_node.value)
+                curr_node = null
+            }
+        }
+    }
 }
 
 
