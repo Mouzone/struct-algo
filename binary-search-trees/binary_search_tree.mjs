@@ -100,7 +100,7 @@ export class Tree {
 
                     iterator.left = node_to_remove.left
                     iterator.right = node_to_remove.right
-                    
+
                     break
                 }
                 prev = iterator
@@ -109,6 +109,26 @@ export class Tree {
 
             return iterator
         }
+    }
+
+    find(value) {
+        let iterator = this.root
+        while (iterator) {
+            if (value === iterator.value) {
+
+                return iterator
+
+            } else if (value < iterator.value) {
+
+                iterator = iterator.left
+
+            } else {
+
+                iterator = iterator.right
+
+            }
+        }
+        return null
     }
 }
 
