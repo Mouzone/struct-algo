@@ -172,76 +172,103 @@ export class Tree {
            const curr_node = stack.pop()
            callback(curr_node)
            if (curr_node.right) {
-               stack.append(curr_node.right)
+               stack.push(curr_node.right)
            }
            if (curr_node.left) {
-               stack.append(curr_node.left)
+               stack.push(curr_node.left)
            }
        }
     }
 
     postOrder(callback) {
-        const stack = []
-        let curr_node = this.root
-        while (curr_node || stack.length) {
-            while (curr_node) {
-                if (curr_node.right) {
-                    stack.push(curr_node.right)
-                }
-                stack.push(curr_node)
-                curr_node = curr_node.left
-            }
+        const stack = [];
+        let curr_node = this.root;
+        let last_node_visited = null;
 
-            if (stack.length && curr_node.right === stack[-1]) {
-                stack[-1] = curr_node
-                curr_node = curr_node.right
+        while (stack.length || curr_node) {
+            if (curr_node) {
+                stack.push(curr_node);
+                curr_node = curr_node.left;
             } else {
-                callback(curr_node.value)
-                curr_node = null
+                let peek_node = stack[stack.length - 1];
+                if (peek_node.right && last_node_visited !== peek_node.right) {
+                    curr_node = peek_node.right;
+                } else {
+                    callback(peek_node);
+                    last_node_visited = stack.pop();
+                }
             }
         }
     }
 
     height(node){
-        let stack = [node]
-        let result = 0
-        while (stack.length) {
-            for (let i = 0; i < stack.length; i++) {
-                const curr_node = stack.pop()
-                if (!curr_node.left && !curr_node.right) {
-                    return result
-                }
+        if (!node) return -1;  // Base case
 
-                if (curr_node.left) {
-                    stack.append(curr_node.left)
-                }
-                if (curr_node.right) {
-                    stack.append(curr_node.right)
-                }
-            }
-            result += 1
-        }
+        const left_height = this.height(node.left);
+        const right_height = this.height(node.right);
+
+        return Math.max(left_height, right_height) + 1;
     }
 
     depth(node) {
-        const stack = [this.root]
-        let result = 0
-        while (stack.length) {
-            for (let i = 0; i < stack.length; i++) {
-                const curr_node = stack.pop()
-                if (curr_node === node) {
-                    return result
-                }
+        let current = this.root;
+        let depth = 0;
 
-                if (curr_node.left){
-                    stack.append(curr_node.left)
-                }
-                if (curr_node.right) {
-                    stack.append(curr_node.right)
-                }
+        while (current) {
+            if (current === node) {
+                return depth;
+            } else if (node.value < current.value) {
+                current = current.left;
+            } else {
+                current = current.right;
             }
-            result += 1
+            depth++;
         }
+    }
+
+    isBalanced() {
+        function check(node) {
+            if (!node.left && !node.right) {
+                return [true, 0]
+            }
+
+            let left_result = [true, -1]
+            if (node.left) {
+                left_result = check(node.left)
+            }
+
+            let right_result = [true, -1]
+            if (node.right) {
+                right_result = check(node.right)
+            }
+
+            return [left_result[0] && right_result[0] && Math.abs(left_result[1] - right_result[1]) <= 1
+                , Math.max(left_result[1], right_result[1]) + 1]
+        }
+
+        return check(this.root)[0]
+    }
+
+    rebalance() {
+        const stack = []
+        const numbers = []
+        let current = this.root
+
+        while (1) {
+            if (current) {
+                stack.push(current)
+                current = current.left
+            } else if (stack.length) {
+                current = stack.pop()
+                numbers.push(current.value)
+
+                current = current.right
+            } else {
+                break
+            }
+        }
+
+        this.root = this.buildTree(numbers)
     }
 }
 
