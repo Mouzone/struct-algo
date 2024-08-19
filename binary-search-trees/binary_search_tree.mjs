@@ -135,6 +135,7 @@ export class Tree {
         const queue = [this.root]
         while (queue.length) {
             const curr_node = queue.shift()
+
             callback(curr_node)
             if (curr_node.left) {
                 queue.push(curr_node.left)
@@ -166,6 +167,7 @@ export class Tree {
     preOrder(callback) {
         const stack = [this.root]
 
+        // todo: fix
         while (stack.length) {
            const curr_node = stack.pop()
            callback(curr_node)
@@ -197,6 +199,48 @@ export class Tree {
                 callback(curr_node.value)
                 curr_node = null
             }
+        }
+    }
+
+    height(node){
+        let stack = [node]
+        let result = 0
+        while (stack.length) {
+            for (let i = 0; i < stack.length; i++) {
+                const curr_node = stack.pop()
+                if (!curr_node.left && !curr_node.right) {
+                    return result
+                }
+
+                if (curr_node.left) {
+                    stack.append(curr_node.left)
+                }
+                if (curr_node.right) {
+                    stack.append(curr_node.right)
+                }
+            }
+            result += 1
+        }
+    }
+
+    depth(node) {
+        const stack = [this.root]
+        let result = 0
+        while (stack.length) {
+            for (let i = 0; i < stack.length; i++) {
+                const curr_node = stack.pop()
+                if (curr_node === node) {
+                    return result
+                }
+
+                if (curr_node.left){
+                    stack.append(curr_node.left)
+                }
+                if (curr_node.right) {
+                    stack.append(curr_node.right)
+                }
+            }
+            result += 1
         }
     }
 }
