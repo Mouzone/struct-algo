@@ -250,25 +250,9 @@ export class Tree {
     }
 
     rebalance() {
-        const stack = []
-        const numbers = []
-        let current = this.root
-
-        while (1) {
-            if (current) {
-                stack.push(current)
-                current = current.left
-            } else if (stack.length) {
-                current = stack.pop()
-                numbers.push(current.value)
-
-                current = current.right
-            } else {
-                break
-            }
-        }
-
-        this.root = this.buildTree(numbers)
+        const numbers = [];
+        this.inOrder(node => numbers.push(node.value));
+        this.root = this.buildTree(numbers);
     }
 }
 
