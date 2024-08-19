@@ -15,21 +15,27 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 prettyPrint(tree.root)
-// tree.insert(10)
-// prettyPrint(tree.root)
-// tree.insert(0)
-// prettyPrint(tree.root)
+console.log(tree.isBalanced())
 
-// tree.delete(0)
-// prettyPrint(tree.root)
-// tree.delete(9)
-// prettyPrint(tree.root)
-// tree.delete(4)
-// prettyPrint(tree.root)
-// tree.delete(8)
-// prettyPrint(tree.root)
-// tree.delete(67)
-// tree.delete(6345)
-// prettyPrint(tree.root)
-// tree.delete(9)
-// prettyPrint(tree.root)
+const preOrderValues = []
+tree.preOrder(node => preOrderValues.push(node.value))
+console.log('Pre-Order:', preOrderValues.join(' '))
+
+const postOrderValues = []
+tree.postOrder(node => postOrderValues.push(node.value))
+console.log('Post-Order:', postOrderValues.join(' '))
+
+const inOrderValues = []
+tree.inOrder(node => inOrderValues.push(node.value))
+console.log('In-Order:', inOrderValues.join(' '))
+
+tree.insert(101)
+tree.insert(102)
+tree.insert(103)
+tree.insert(104)
+prettyPrint(tree.root)
+console.log(tree.isBalanced())
+
+tree.rebalance()
+prettyPrint(tree.root)
+console.log(tree.isBalanced())
